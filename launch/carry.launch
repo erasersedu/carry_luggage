@@ -1,0 +1,4 @@
+<launch>
+  <!-- sample node -->
+  <node name="carry_luggage" pkg="carry_luggage" type="carry_main.py" output="screen"/>
+</launch>
