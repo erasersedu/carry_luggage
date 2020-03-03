@@ -11,6 +11,8 @@ import random
 import traceback
 import time
 
+from states.move_arm import MoveArm
+
 print("Initializing...")
 rospy.sleep(3)
 
@@ -26,21 +28,22 @@ def create_sm():
 	def start_cb(userdata):
 		try:
 			print("First state.")
-			rospy.sleep(2)
 
 			return 'success'
 		except:
 			return 'failure'
 
 	smach.StateMachine.add('START', smach.CBState(start_cb),
-				transitions = {'success': 'FINAL',
+				transitions = {'success': 'MOVEARM',
 					       'failure': 'failure'})
+
+        smach.StateMachine.add('MOVEARM', MoveArm(target="vertical"),
+                               transitions={'success': 'FINAL', 'timeout': 'failure', 'failure': 'failure'})
 
 	@smach.cb_interface(outcomes=['success', 'failure'])
 	def final_cb(userdata):
 		try:
 			print("Last state.")
-			rospy.sleep(2)
 
 			return 'success'
 		except:
@@ -59,7 +62,8 @@ sm = create_sm()
 outcome = sm.execute()
 
 if outcome == 'success':
-	rospy.loginfo('I finished the task.')
+	print("I finished the task.")
 
 else:
-	rospy.signal_shutdown('Some error occured.')
+	print("Some error occured.")
+	rospy.signal_shutdown('failure')
