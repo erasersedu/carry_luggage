@@ -8,7 +8,7 @@ import traceback
 import time
 
 class MoveArm(smach.State):
-	def __init__(self, target = "fixed", pose = [0.0, 0.0, 0.0, 0.0, 0.0], timeout=None):
+	def __init__(self, target = 'other', pose = [0.0, 0.0, 0.0, 0.0, 0.0], delay = 5, timeout=None):
 		smach.State.__init__(self, outcomes=['success', 'failure', 'timeout'],
 					   input_keys = ['start_time', 'stop_time'])
 
@@ -25,35 +25,37 @@ class MoveArm(smach.State):
 	    	self.pos4 = Float64()
 	    	self.pos5 = Float64()
 
-		if target == "vertical":
+		self.delay = delay
+
+		if target == 'vertical':
 			self.pos1 = 0.0
 		    	self.pos2 = 0.0
 		    	self.pos3 = 0.0
 		    	self.pos4 = 0.0
 		    	self.pos5 = 0.0
 
-		if target == "front":
+		elif target == 'front':
+			self.pos1 = 0.0
+		    	self.pos2 = 0.3
+		    	self.pos3 = 0.3
+		    	self.pos4 = -0.3
+		    	self.pos5 = 0.0
+
+		elif target == 'left':
 			self.pos1 = 0.0
 		    	self.pos2 = 0.0
 		    	self.pos3 = 0.0
 		    	self.pos4 = 0.0
 		    	self.pos5 = 0.0
 
-		if target == "left":
+		elif target == 'right':
 			self.pos1 = 0.0
 		    	self.pos2 = 0.0
 		    	self.pos3 = 0.0
 		    	self.pos4 = 0.0
 		    	self.pos5 = 0.0
 
-		if target == "right":
-			self.pos1 = 0.0
-		    	self.pos2 = 0.0
-		    	self.pos3 = 0.0
-		    	self.pos4 = 0.0
-		    	self.pos5 = 0.0
-
-		elif target == "fixed":
+		elif target == 'other':
 			if len(pose) == 5:
 				self.pos1 = pose[0]
 			    	self.pos2 = pose[1]
@@ -76,11 +78,15 @@ class MoveArm(smach.State):
 
 	def execute(self, userdata):
 		try:
-			self.joint1.publish(self.pos1)
-			self.joint2.publish(self.pos2)
-			self.joint3.publish(self.pos3)
-			self.joint4.publish(self.pos4)
-			self.joint5.publish(self.pos5)
+			start_time = time.time()
+			while time.time() - start_time < self.delay: 
+				self.joint1.publish(self.pos1)
+				self.joint2.publish(self.pos2)
+				self.joint3.publish(self.pos3)
+				self.joint4.publish(self.pos4)
+				self.joint5.publish(self.pos5)
+
+				rospy.Rate(10).sleep()
 
 			if userdata.start_time and userdata.stop_time:
 				interval = time.time() - userdata.start_time
@@ -90,6 +96,6 @@ class MoveArm(smach.State):
 			return 'success'
 
 		except:
-			rospy.logerr(traceback.format_exc())
+			print(traceback.format_exc())
 			return 'failure'
 

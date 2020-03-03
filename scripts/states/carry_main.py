@@ -14,11 +14,14 @@ import time
 from states.move_arm import MoveArm
 
 print("Initializing...")
-rospy.sleep(3)
+rospy.sleep(1)
 
 def create_sm():
 
   sm = smach.StateMachine(outcomes=['success', 'failure'])
+
+  sm.userdata.start_time = []
+  sm.userdata.stop_time = []
 
   with sm:
 	##########
@@ -37,7 +40,7 @@ def create_sm():
 				transitions = {'success': 'MOVEARM',
 					       'failure': 'failure'})
 
-        smach.StateMachine.add('MOVEARM', MoveArm(target="vertical"),
+        smach.StateMachine.add('MOVEARM', MoveArm(target = 'front'),
                                transitions={'success': 'FINAL', 'timeout': 'failure', 'failure': 'failure'})
 
 	@smach.cb_interface(outcomes=['success', 'failure'])
@@ -57,6 +60,8 @@ def create_sm():
 	##########
 
   return sm
+
+rospy.init_node('my_carry')
 
 sm = create_sm()
 outcome = sm.execute()
