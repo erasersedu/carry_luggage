@@ -19,6 +19,12 @@ class MoveArm(smach.State):
 	    	self.joint4 = rospy.Publisher('/wrist_controller/command',Float64,queue_size=1)
 		self.joint5 = rospy.Publisher('/hand_controller/command',Float64,queue_size=1)
 
+		self.pos1 = Float64()
+	    	self.pos2 = Float64()
+	    	self.pos3 = Float64()
+	    	self.pos4 = Float64()
+	    	self.pos5 = Float64()
+
 		if target == "vertical":
 			self.pos1 = 0.0
 		    	self.pos2 = 0.0
