@@ -40,7 +40,13 @@ def create_sm():
 				transitions = {'success': 'MOVEARM',
 					       'failure': 'failure'})
 
-        smach.StateMachine.add('MOVEARM', MoveArm(target = 'front', pose=[0.0, 0.0, 0.0, 0.0, 0.0], delay = 5),
+        smach.StateMachine.add('MOVEARM', MoveArm(target = 'vertical', pose=[0.0, 0.0, 0.0, 0.0, 0.0], delay = 10),
+                               transitions={'success': 'MOVEARM2', 'timeout': 'failure', 'failure': 'failure'})
+
+        smach.StateMachine.add('MOVEARM2', MoveArm(target = 'front2', pose=[0.0, 0.0, 0.0, 0.0, 0.0], delay = 10),
+                               transitions={'success': 'MOVEARM3', 'timeout': 'failure', 'failure': 'failure'})
+
+        smach.StateMachine.add('MOVEARM3', MoveArm(target = 'front', pose=[0.0, 0.0, 0.0, 0.0, 0.0], delay = 5),
                                transitions={'success': 'FINAL', 'timeout': 'failure', 'failure': 'failure'})
 
 	@smach.cb_interface(outcomes=['success', 'failure'])
@@ -56,14 +62,17 @@ def create_sm():
 				transitions = {'success': 'success',
 					       'failure': 'failure'})
 	##########
-	#END: BASIC FUNCTION
+	#END: BASIC FUNCTION2
 	##########
 
   return sm
 
+#######
+#######
 rospy.init_node('my_carry')
 
 sm = create_sm()
+
 outcome = sm.execute()
 
 if outcome == 'success':
@@ -72,3 +81,4 @@ if outcome == 'success':
 else:
 	print("Some error occured.")
 	rospy.signal_shutdown('failure')
+
