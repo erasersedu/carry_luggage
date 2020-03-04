@@ -4,6 +4,8 @@
 
 import rospy
 import smach
+import traceback
+import time
 
 from std_msgs.msg import Bool
 
@@ -20,7 +22,7 @@ class FollowPerson(smach.State):
 		smach.State.__init__(self, outcomes=['success', 'failure', 'timeout'],
 					   input_keys = ['start_time', 'stop_time'])
 
-		rospy.init_node('follow_person', anonymous = True)
+		#rospy.init_node('follow_person', anonymous = True)
 
 		self.soundhandle = SoundClient()
 		rospy.sleep(1)
@@ -45,14 +47,16 @@ class FollowPerson(smach.State):
 		    if msg.data == True and msg.data != self.fp_legs_found:
 			    self.fp_legs_found = True
 
-			    self._tts.say('I found you!')
+			    self.soundhandle.say('I found you!')
+			    rospy.sleep(3)
+			    print("Legs found")
 			    rospy.loginfo('Legs found')
 
 		    elif msg.data == False and msg.data != self.fp_legs_found:
 			    self.fp_legs_found = False
 
 			    self.soundhandle.say('Sorry, I lost you! Please come where I can see you.')
-			    rospy.sleep(3)
+			    rospy.sleep(6)
 
 			    rospy.loginfo('Legs lost')
 		except:
@@ -75,21 +79,24 @@ class FollowPerson(smach.State):
 	def execute(self, userdata):
 		try:
 			rate = rospy.Rate(30)
-			self.whole_body.move_to_go()
 
 			self.fp_enable_leg_finder_pub.publish(False)
 			self.fp_start_follow_pub.publish(False)
 
 			self.soundhandle.say('I will start following you.')
+			rospy.sleep(3)
 
 			#TODO: Call startstop function
-			start_time = time.time()
 			#while self.startstop == False:
 			#	rate.sleep()
 
 			self.soundhandle.say('Now I will find you.')
-			self.fp_enable_leg_finder_pub.publish(True)
+			rospy.sleep(3)
 
+			self.fp_enable_leg_finder_pub.publish(True)
+			self.fp_start_follow_pub.publish(True)
+
+			start_time = time.time()
 			while self.startstop == False:
 				if self.fp_legs_found == False:
 					self.fp_start_follow_pub.publish(False)
@@ -99,7 +106,7 @@ class FollowPerson(smach.State):
 					self.fp_start_follow_pub.publish(True)
 
 				#TODO: Stand-alone callback from subscriber 
-				while time.time() - start_time < self.delay:
+				if time.time() - start_time > self.delay:
 					self.startstop = True
 
 				rate.sleep()
@@ -120,6 +127,8 @@ class FollowPerson(smach.State):
 
 			self.fp_enable_leg_finder_pub.publish(False)
 			self.fp_start_follow_pub.publish(False)
+
+			print(traceback.format_exc())
 
 			return 'failure'
 
