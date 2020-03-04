@@ -1,4 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
 <launch>
-  <!-- sample node -->
+  <node name="soundplay_node" pkg="sound_play" type="soundplay_node.py"/>
   <node name="carry_luggage" pkg="carry_luggage" type="carry_main.py" output="screen"/>
 </launch>

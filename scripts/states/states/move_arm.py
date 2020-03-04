@@ -12,6 +12,8 @@ class MoveArm(smach.State):
 		smach.State.__init__(self, outcomes=['success', 'failure', 'timeout'],
 					   input_keys = ['start_time', 'stop_time'])
 
+		rospy.init_node('move_arm', anonymous = True)
+
 		# publish command message to joints/servos of arm
 	    	self.joint1 = rospy.Publisher('/waist_controller/command',Float64,queue_size=1)
 		self.joint2 = rospy.Publisher('/shoulder_controller/command',Float64,queue_size=1)
