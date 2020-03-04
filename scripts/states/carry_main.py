@@ -40,7 +40,7 @@ def create_sm():
 				transitions = {'success': 'MOVEARM',
 					       'failure': 'failure'})
 
-        smach.StateMachine.add('MOVEARM', MoveArm(target = 'front'),
+        smach.StateMachine.add('MOVEARM', MoveArm(target = 'front', pose=[0.0, 0.0, 0.0, 0.0, 0.0], delay = 5),
                                transitions={'success': 'FINAL', 'timeout': 'failure', 'failure': 'failure'})
 
 	@smach.cb_interface(outcomes=['success', 'failure'])
