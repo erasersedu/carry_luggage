@@ -74,6 +74,7 @@ def create_sm():
 
 #######
 #######
+
 rospy.init_node('my_carry')
 
 sm = create_sm()
@@ -86,4 +87,3 @@ if outcome == 'success':
 else:
 	print("Some error occured.")
 	rospy.signal_shutdown('failure')
-
