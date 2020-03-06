@@ -22,6 +22,8 @@ def create_sm():
 
   sm = smach.StateMachine(outcomes=['success', 'failure'])
 
+  sm.userdata.pose = [0.0, 0.0, 0.0]
+
   sm.userdata.start_time = []
   sm.userdata.stop_time = []
 
@@ -40,14 +42,47 @@ def create_sm():
 			return 'failure'
 
 	smach.StateMachine.add('START', smach.CBState(start_cb),
-				transitions = {'success': 'MOVEBASE', #'FOLLOWPERSON', #'MOVEARM',
+				transitions = {'success': 'SETPOSE', #'FOLLOWPERSON', #'MOVEARM',
 					       'failure': 'failure'})
 
         smach.StateMachine.add('FOLLOWPERSON', FollowPerson(delay = 60),
                                transitions={'success': 'FINAL', 'timeout': 'failure', 'failure': 'failure'})
 
-        smach.StateMachine.add('MOVEBASE', MoveBase(pose=[0.2, 0.2, 0.76], mode = 'rel'),
+	#Move rel example
+	@smach.cb_interface(outcomes=['success','failure'],
+			    input_keys=['pose'], output_keys=['pose'])
+	def set_pose_cb(userdata):
+		try:
+		    userdata.pose = [0.2, 0.2, 0.76]
+
+		    return 'success'
+		except:
+		    return 'failure'
+	smach.StateMachine.add('SETPOSE', smach.CBState(set_pose_cb),
+		           transitions = {'success': 'MOVEBASE',
+		                          'failure': 'failure'})
+
+        smach.StateMachine.add('MOVEBASE', MoveBase(mode = 'rel'),
+                               transitions={'success': 'SETPOSE2', 'timeout': 'failure', 'failure': 'failure'})
+	#####
+
+	#Mive abs example
+	@smach.cb_interface(outcomes=['success','failure'],
+			    input_keys=['pose'], output_keys=['pose'])
+	def set_pose_cb(userdata):
+		try:
+		    userdata.pose = [0.530, 1.346, 0.752]
+
+		    return 'success'
+		except:
+		    return 'failure'
+	smach.StateMachine.add('SETPOSE2', smach.CBState(set_pose_cb),
+		           transitions = {'success': 'MOVEBASE',
+		                          'failure': 'failure'})
+
+        smach.StateMachine.add('MOVEBASE2', MoveBase(mode = 'abs'),
                                transitions={'success': 'FINAL', 'timeout': 'failure', 'failure': 'failure'})
+	#####
 
         smach.StateMachine.add('MOVEARM', MoveArm(target = 'vertical', pose=[0.0, 0.0, 0.0, 0.0, 0.0], delay = 10),
                                transitions={'success': 'MOVEARM2', 'timeout': 'failure', 'failure': 'failure'})

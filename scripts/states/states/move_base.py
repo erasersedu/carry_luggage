@@ -16,7 +16,7 @@ from tf.transformations import quaternion_from_euler
 class MoveBase(smach.State):
 	def __init__(self, pose = [0.0, 0.0, 0.0], mode = 'abs', timeout=None):
 		smach.State.__init__(self, outcomes=['success', 'failure', 'timeout'],
-					   input_keys = ['start_time', 'stop_time'])
+					   input_keys = ['pose', 'start_time', 'stop_time'])
 
 		# Subscribe to the move_base action server
 		self.move_base = actionlib.SimpleActionClient("move_base", MoveBaseAction)
@@ -26,15 +26,13 @@ class MoveBase(smach.State):
 		self.move_base.wait_for_server(rospy.Duration(120))
 		rospy.loginfo("Connected to move base server")
 
-		self.pose = pose
 		self.mode = mode
-
 		self.goal_sent = False
 
 	def execute(self, userdata):
 		try:
-			quaternion = quaternion_from_euler(0.0, 0.0, self.pose[2])
-			location = Pose(Point(self.pose[0], self.pose[1], 0.000), Quaternion(quaternion[0], quaternion[1], quaternion[2], quaternion[3]))
+			quaternion = quaternion_from_euler(0.0, 0.0, userdata.pose[2])
+			location = Pose(Point(userdata.pose[0], userdata.pose[1], 0.000), Quaternion(quaternion[0], quaternion[1], quaternion[2], quaternion[3]))
 
 			goal = MoveBaseGoal()
 
