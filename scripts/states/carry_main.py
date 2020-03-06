@@ -13,6 +13,7 @@ import time
 
 from states.move_arm import MoveArm
 from states.follow_person import FollowPerson
+from states.move_base import MoveBase
 
 print("Initializing...")
 rospy.sleep(1)
@@ -39,10 +40,13 @@ def create_sm():
 			return 'failure'
 
 	smach.StateMachine.add('START', smach.CBState(start_cb),
-				transitions = {'success': 'MOVEARM', #'FOLLOWPERSON', #'MOVEARM',
+				transitions = {'success': 'MOVEBASE', #'FOLLOWPERSON', #'MOVEARM',
 					       'failure': 'failure'})
 
         smach.StateMachine.add('FOLLOWPERSON', FollowPerson(delay = 60),
+                               transitions={'success': 'FINAL', 'timeout': 'failure', 'failure': 'failure'})
+
+        smach.StateMachine.add('MOVEBASE', MoveBase(pose=[0.2, 0.2, 0.76], mode = 'rel'),
                                transitions={'success': 'FINAL', 'timeout': 'failure', 'failure': 'failure'})
 
         smach.StateMachine.add('MOVEARM', MoveArm(target = 'vertical', pose=[0.0, 0.0, 0.0, 0.0, 0.0], delay = 10),
