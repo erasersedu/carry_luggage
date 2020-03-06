@@ -18,6 +18,8 @@ class MoveBase(smach.State):
 		smach.State.__init__(self, outcomes=['success', 'failure', 'timeout'],
 					   input_keys = ['pose', 'start_time', 'stop_time'])
 
+		rospy.on_shutdown(self.shutdown)
+
 		# Subscribe to the move_base action server
 		self.move_base = actionlib.SimpleActionClient("move_base", MoveBaseAction)
 		rospy.loginfo("Waiting for move_base action server...")
@@ -75,3 +77,8 @@ class MoveBase(smach.State):
 			print(traceback.format_exc())
 			return 'failure'
 
+	def shutdown(self):
+		if self.goal_sent:
+			self.move_base.cancel_goal()
+		rospy.loginfo("Stop")
+		rospy.sleep(1)
