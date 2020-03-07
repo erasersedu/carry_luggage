@@ -34,7 +34,7 @@ def create_sm():
 	@smach.cb_interface(outcomes=['success', 'failure'])
 	def start_cb(userdata):
 		try:
-			#rospy.sleep(10)
+			rospy.sleep(10)
 			print("First state.")
 
 			return 'success'
@@ -42,7 +42,7 @@ def create_sm():
 			return 'failure'
 
 	smach.StateMachine.add('START', smach.CBState(start_cb),
-				transitions = {'success': 'SETPOSE', #'FOLLOWPERSON', #'MOVEARM',
+				transitions = {'success': 'START', #'SETPOSE', #'FOLLOWPERSON', #'MOVEARM',
 					       'failure': 'failure'})
 
         smach.StateMachine.add('FOLLOWPERSON', FollowPerson(delay = 60),

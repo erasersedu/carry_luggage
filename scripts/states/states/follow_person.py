@@ -29,7 +29,7 @@ class FollowPerson(smach.State):
 		self.soundhandle.stopAll()
 
 		# Announce that we are ready for input
-		self.soundhandle.playWave("~/erasersedu_ws/src/turtlebot_start/sounds/R2D2a.wav")
+		self.soundhandle.playWave("/home/roboworks/erasersedu_ws/src/carry_luggage/sounds/R2D2a.wav")
 
 		# Subscribe to the recognizer output and set the callback function
 		rospy.Subscriber('/lm_data', String, self.talkback)
@@ -89,49 +89,49 @@ class FollowPerson(smach.State):
 		rospy.loginfo(msg.data)
         
 		if msg.data.find('INTRODUCE-YOURSELF')>-1:
-			self.soundhandle.playWave("~/erasersedu_ws/src/turtlebot_start/sounds/R2D2a.wav")
+			self.soundhandle.playWave("/home/roboworks/erasersedu_ws/src/carry_luggage/sounds/R2D2a.wav")
 			#rospy.sleep(1)
 			self.soundhandle.say("I heard you want me to introduce myself. I am PartyBot. I am a party robot to serve you and have fun.")
 			#rospy.sleep(10) 
 		elif msg.data.find('HOW-OLD-ARE-YOU')>-1:
-			self.soundhandle.playWave("~/erasersedu_ws/src/turtlebot_start/sounds/R2D2a.wav")
+			self.soundhandle.playWave("/home/roboworks/erasersedu_ws/src/carry_luggage/sounds/R2D2a.wav")
 			#rospy.sleep(1)
 			self.soundhandle.say("I heard you ask about my age. I am five years old.")
 			#rospy.sleep(5) 
 		elif msg.data.find('FOLLOW-ME')>-1:
-			self.soundhandle.playWave("~/erasersedu_ws/src/turtlebot_start/sounds/R2D2a.wav")
+			self.soundhandle.playWave("/home/roboworks/erasersedu_ws/src/carry_luggage/sounds/R2D2a.wav")
 			#rospy.sleep(1)
 			self.soundhandle.say("OK. I will start follow you.")
 			#rospy.sleep(5)
 			self.control_follow(1)
 		elif msg.data.find('STOP-FOLLOW')>-1:
-			self.soundhandle.playWave("~/erasersedu_ws/src/turtlebot_start/sounds/R2D2a.wav")
+			self.soundhandle.playWave("/home/roboworks/erasersedu_ws/src/carry_luggage/sounds/R2D2a.wav")
 			#rospy.sleep(1)
 			self.soundhandle.say("OK. I will stop follow you.")
 			#rospy.sleep(5)
 			self.control_follow(0)
 		elif msg.data.find('ARE-YOU-FROM')>-1:
-			self.soundhandle.playWave("~/erasersedu_ws/src/turtlebot_start/sounds/R2D2a.wav")
+			self.soundhandle.playWave("/home/roboworks/erasersedu_ws/src/carry_luggage/sounds/R2D2a.wav")
 			#rospy.sleep(1)
 			self.soundhandle.say("I heard you ask about my hometown. I am from China.")
 			#rospy.sleep(5)
 		elif msg.data.find('CAN-YOU-DO')>-1:
-			self.soundhandle.playWave("~/erasersedu_ws/src/turtlebot_start/sounds/R2D2a.wav")
+			self.soundhandle.playWave("/home/roboworks/erasersedu_ws/src/carry_luggage/sounds/R2D2a.wav")
 			#rospy.sleep(1)
 			self.soundhandle.say("I heard you ask me what can I do? I am a home robot. I am good at singing and dancing. I tell funny jokes and I take great photos of people")
 			#rospy.sleep(5)
 		elif msg.data.find('TELL-A-FUNNY-JOKE')>-1:
-			self.soundhandle.playWave("~/erasersedu_ws/src/turtlebot_start/sounds/R2D2a.wav")
+			self.soundhandle.playWave("/home/roboworks/erasersedu_ws/src/carry_luggage/sounds/R2D2a.wav")
 			#rospy.sleep(1)
 			self.soundhandle.say("You want to hear a joke? What is orange and sounds like a parrot? Erm, It is a carrot. Ha ha ha")
 			#rospy.sleep(8)
 		elif msg.data.find('SING-AND-DANCE')>-1:
-			self.soundhandle.playWave("~/erasersedu_ws/src/turtlebot_start/sounds/R2D2a.wav")
+			self.soundhandle.playWave("/home/roboworks/erasersedu_ws/src/carry_luggage/sounds/R2D2a.wav")
 			#rospy.sleep(1)
 			self.soundhandle.say("You want me to sing and dance? sure. let me show you")
 			#rospy.sleep(5)
 			self.dance_arm.publish('dance arm')      	
-			self.soundhandle.playWave("~/erasersedu_ws/src/turtlebot_start/sounds/swtheme.wav", blocking=False)
+			self.soundhandle.playWave("~/erasersedu_ws/src/carry_luggage/sounds/swtheme.wav", blocking=False)
 			#rospy.sleep(1) 
 			# Dancing
 			# create two different Twist() variables.  One for moving forward.  One for turning 45 degrees.
@@ -156,7 +156,7 @@ class FollowPerson(smach.State):
 				rospy.sleep(1) 
 			rospy.sleep(6)
 		elif msg.data.find('TAKE-A-PHOTO')>-1:
-			self.soundhandle.playWave("~/erasersedu_ws/src/turtlebot_start/sounds/R2D2a.wav")
+			self.soundhandle.playWave("/home/roboworks/erasersedu_ws/src/carry_luggage/sounds/R2D2a.wav")
 			#rospy.sleep(1)
 			#call('rosrun image_view image_view image:=/camera_top/rgb/image_raw', shell=False)
 			#rospy.sleep(1)
