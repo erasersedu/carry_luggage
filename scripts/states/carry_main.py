@@ -42,7 +42,7 @@ def create_sm():
 			return 'failure'
 
 	smach.StateMachine.add('START', smach.CBState(start_cb),
-				transitions = {'success': 'START', #'SETPOSE', #'FOLLOWPERSON', #'MOVEARM',
+				transitions = {'success': 'FOLLOWPERSON', #'SETPOSE', #'FOLLOWPERSON', #'MOVEARM',
 					       'failure': 'failure'})
 
         smach.StateMachine.add('FOLLOWPERSON', FollowPerson(delay = 60),
