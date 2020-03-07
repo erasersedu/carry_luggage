@@ -71,13 +71,13 @@ def create_sm():
 			    input_keys=['pose'], output_keys=['pose'])
 	def set_pose_cb(userdata):
 		try:
-		    userdata.pose = [0.530, 1.346, 0.752]
+		    userdata.pose = [0.587, 1.572, 0.787]
 
 		    return 'success'
 		except:
 		    return 'failure'
 	smach.StateMachine.add('SETPOSE2', smach.CBState(set_pose_cb),
-		           transitions = {'success': 'MOVEBASE',
+		           transitions = {'success': 'MOVEBASE2',
 		                          'failure': 'failure'})
 
         smach.StateMachine.add('MOVEBASE2', MoveBase(mode = 'abs'),
