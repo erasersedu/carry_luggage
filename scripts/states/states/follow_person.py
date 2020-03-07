@@ -45,7 +45,8 @@ class FollowPerson(smach.State):
 
 		self.fp_legs_found = False
 
-		self.startstop = False
+		self.start = False
+		self.stop = False
 
 		self.delay = delay
 
@@ -74,17 +75,18 @@ class FollowPerson(smach.State):
 		#msg.data=msg.data.lower()
 		rospy.loginfo(msg.data)
 
-		self.startstop = False
+		self.start = False
+		self.stop = False
 
 		if msg.data.find('FOLLOW-ME')>-1:
-			self.soundhandle.playWave("/home/roboworks/erasersedu_ws/src/carry_luggage/sounds/R2D2a.wav")
-			self.startstop = True
+			#self.soundhandle.playWave("/home/roboworks/erasersedu_ws/src/carry_luggage/sounds/R2D2a.wav")
+			self.start = True
 
 		elif msg.data.find('STOP-FOLLOW')>-1:
-			self.soundhandle.playWave("/home/roboworks/erasersedu_ws/src/carry_luggage/sounds/R2D2a.wav")
-			self.startstop = True
+			#self.soundhandle.playWave("/home/roboworks/erasersedu_ws/src/carry_luggage/sounds/R2D2a.wav")
+			self.stop = True
 
-		else: rospy.sleep(3)
+		#else: rospy.sleep(3)
 
 	def execute(self, userdata):
 		try:
@@ -97,7 +99,7 @@ class FollowPerson(smach.State):
 			rospy.sleep(5)
 
 			#Call startstop function
-			while self.startstop == False:
+			while self.start == False:
 				rate.sleep()
 
 			self.soundhandle.say('Now I will find you.')
@@ -107,7 +109,7 @@ class FollowPerson(smach.State):
 			self.fp_start_follow_pub.publish(True)
 
 			start_time = time.time()
-			while self.startstop == False:
+			while self.stop == False:
 				if self.fp_legs_found == False:
 					self.fp_start_follow_pub.publish(False)
 					while self.fp_legs_found == False:
@@ -120,13 +122,11 @@ class FollowPerson(smach.State):
 
 				rate.sleep()
 
-			self.startstop = False
-			self.fp_legs_found = False
-
-			self.fp_enable_leg_finder_pub.publish(False)
 			self.fp_start_follow_pub.publish(False)
+			self.fp_enable_leg_finder_pub.publish(False)
 
 			self.soundhandle.say('OK, I will stop following you.')
+			rospy.sleep(5)
 
 			return 'success'
 
