@@ -33,8 +33,8 @@ class MoveBase(smach.State):
 
 	def execute(self, userdata):
 		try:
-			quaternion = quaternion_from_euler(0.0, 0.0, userdata.pose[2])
-			location = Pose(Point(userdata.pose[0], userdata.pose[1], 0.000), Quaternion(quaternion[0], quaternion[1], quaternion[2], quaternion[3]))
+			quaternion = quaternion_from_euler( 0.0, 0.0, np.deg2rad(userdata.pose[2]) )
+			location = Pose( Point(userdata.pose[0], userdata.pose[1], 0.000), Quaternion(quaternion[0], quaternion[1], quaternion[2], quaternion[3]) )
 
 			goal = MoveBaseGoal()
 
