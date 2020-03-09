@@ -53,7 +53,7 @@ def create_sm():
                                transitions={'success': 'PLAY', 'failure': 'failure'})
 
         smach.StateMachine.add('PLAY', RobotPlay(path = "/home/roboworks/erasersedu_ws/src/carry_luggage/sounds/R2D2a.wav"),
-                               transitions={'success': 'FINAL', 'failure': 'failure'})
+                               transitions={'success': 'CONFIRMATION', 'failure': 'failure'})
 
         smach.StateMachine.add('CONFIRMATION', RobotYesNo(message = "Can you hear me?"),
                                transitions={'yes': 'CONFIRMATION', 'no':'CONFIRMATION', 'failure': 'failure'})

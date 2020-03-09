@@ -18,7 +18,7 @@ from sound_play.libsoundplay import SoundClient
 THRESHOLD = 12.0
 
 class RobotSay(smach.State):
-	def __init__(self, message = "Hello!", delay = 5):
+	def __init__(self, message = "Hello!", delay = 1):
 		smach.State.__init__(self, outcomes=['success', 'failure'])
 
 		self.soundhandle = SoundClient(blocking=True)
@@ -56,11 +56,12 @@ class RobotPlay(smach.State):
 		try:
 			rate = rospy.Rate(30)
 
-			if not path == "" and os.path.exists(self.path):
+			if not self.path == "" and os.path.exists(self.path):
 				self.soundhandle.playWave(self.path)
+				rospy.sleep(1)
 			else:
 				self.soundhandle.say('Hello!')
-				rospy.sleep(3)
+				rospy.sleep(1)
 
 			return 'success'
 
@@ -73,7 +74,7 @@ class RobotPlay(smach.State):
 			return 'failure'
 
 class RobotYesNo(smach.State):
-	def __init__(self, message = "Hello!", delay = 5):
+	def __init__(self, message = "Hello!", delay = 1):
 		smach.State.__init__(self, outcomes=['yes', 'no', 'failure'])
 
 		self.soundhandle = SoundClient(blocking=True)
@@ -91,6 +92,7 @@ class RobotYesNo(smach.State):
 
 	def talkback_cb(self, msg):
 		# Print the recognized words on the screen
+		print(len(msg.data))
 		rospy.loginfo(msg.data)
 
 		self.yes = False
@@ -110,7 +112,7 @@ class RobotYesNo(smach.State):
 			rospy.sleep(self.delay)
 
 			self.soundhandle.say('Say yes or no.')
-			rospy.sleep(2)
+			rospy.sleep(1)
 
 			#Call startstop function
 			stop = False
@@ -124,15 +126,15 @@ class RobotYesNo(smach.State):
 
 			if self.yes:
 				self.soundhandle.say('You said yes.')
-				rospy.sleep(2)
+				rospy.sleep(1)
 				return 'yes'
 			elif self.no:
 				self.soundhandle.say('You said no.')
-				rospy.sleep(2)
+				rospy.sleep(1)
 				return 'no'
 			else:
 				self.soundhandle.say("Sorry, I didn't hear you.")
-				rospy.sleep(2)
+				rospy.sleep(1)
 				return 'failure'
 
 		except:

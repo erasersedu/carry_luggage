@@ -56,7 +56,7 @@ class FollowPerson(smach.State):
 			    self.fp_legs_found = True
 
 			    self.soundhandle.say('I found you!')
-			    rospy.sleep(3)
+			    rospy.sleep(1)
 			    print("Legs found")
 			    rospy.loginfo('Legs found')
 
@@ -64,7 +64,7 @@ class FollowPerson(smach.State):
 			    self.fp_legs_found = False
 
 			    self.soundhandle.say('Sorry, I lost you! Please come where I can see you.')
-			    rospy.sleep(6)
+			    rospy.sleep(1)
 
 			    rospy.loginfo('Legs lost')
 		except:
@@ -96,14 +96,14 @@ class FollowPerson(smach.State):
 			self.fp_start_follow_pub.publish(False)
 
 			self.soundhandle.say('Say Follow Me to start following you.')
-			rospy.sleep(5)
+			rospy.sleep(1)
 
 			#Call startstop function
 			while self.start == False:
 				rate.sleep()
 
 			self.soundhandle.say('Now I will find you.')
-			rospy.sleep(3)
+			rospy.sleep(1)
 
 			self.fp_enable_leg_finder_pub.publish(True)
 			self.fp_start_follow_pub.publish(True)
@@ -126,7 +126,7 @@ class FollowPerson(smach.State):
 			self.fp_enable_leg_finder_pub.publish(False)
 
 			self.soundhandle.say('OK, I will stop following you.')
-			rospy.sleep(5)
+			rospy.sleep(1)
 
 			return 'success'
 
