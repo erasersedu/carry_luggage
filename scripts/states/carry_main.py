@@ -14,6 +14,7 @@ import time
 from states.move_arm import MoveArm
 from states.follow_person import FollowPerson
 from states.move_base import MoveBase
+from states.speech import RobotSay, RobotPlay
 
 print("Initializing...")
 rospy.sleep(1)
@@ -42,11 +43,17 @@ def create_sm():
 			return 'failure'
 
 	smach.StateMachine.add('START', smach.CBState(start_cb),
-				transitions = {'success': 'SETPOSE2', #'SETPOSE', #'FOLLOWPERSON', #'MOVEARM',
+				transitions = {'success': 'SAY', #'SETPOSE2', #'SETPOSE', #'FOLLOWPERSON', #'MOVEARM',
 					       'failure': 'failure'})
 
         smach.StateMachine.add('FOLLOWPERSON', FollowPerson(delay = 60),
                                transitions={'success': 'FINAL', 'timeout': 'failure', 'failure': 'failure'})
+
+        smach.StateMachine.add('SAY', RobotSay(sentence = "Hello, I am Turtlebot.", delay = 5),
+                               transitions={'success': 'PLAY', 'failure': 'failure'})
+
+        smach.StateMachine.add('PLAY', RobotPlay(path = "/home/roboworks/erasersedu_ws/src/carry_luggage/sounds/R2D2a.wav"),
+                               transitions={'success': 'FINAL', 'failure': 'failure'})
 
 	#Move rel example
 	@smach.cb_interface(outcomes=['success','failure'],
@@ -66,7 +73,7 @@ def create_sm():
                                transitions={'success': 'FINAL', 'timeout': 'failure', 'failure': 'failure'})
 	#####
 
-	#Mive abs example
+	#Move abs example
 	@smach.cb_interface(outcomes=['success','failure'],
 			    input_keys=['pose'], output_keys=['pose'])
 	def set_pose_cb(userdata):

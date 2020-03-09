@@ -65,7 +65,7 @@ def create_sm():
         smach.StateMachine.add('MOVEBASE', MoveBase(mode = 'rel'),
                                transitions={'success': 'FINAL', 'timeout': 'failure', 'failure': 'failure'})
 
-	#Mive abs example
+	#Move abs example
 	@smach.cb_interface(outcomes=['success','failure'],
 			    input_keys=['pose'], output_keys=['pose'])
 	def set_pose_cb(userdata):

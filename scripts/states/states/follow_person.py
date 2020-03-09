@@ -29,7 +29,7 @@ class FollowPerson(smach.State):
 		self.soundhandle.stopAll()
 
 		# Announce that we are ready for input
-		self.soundhandle.playWave("/home/roboworks/erasersedu_ws/src/carry_luggage/sounds/R2D2a.wav")
+		#self.soundhandle.playWave("/home/roboworks/erasersedu_ws/src/carry_luggage/sounds/R2D2a.wav")
 
 		# Subscribe to the recognizer output and set the callback function
 		rospy.Subscriber('/lm_data', String, self.talkback_cb)
