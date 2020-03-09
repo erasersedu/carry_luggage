@@ -126,14 +126,23 @@ class RobotYesNo(smach.State):
 
 			if self.yes:
 				self.soundhandle.say('You said yes.')
+				self.yes = False
+				self.no = False
+
 				rospy.sleep(1)
 				return 'yes'
 			elif self.no:
 				self.soundhandle.say('You said no.')
+				self.yes = False
+				self.no = False
+
 				rospy.sleep(1)
 				return 'no'
 			else:
 				self.soundhandle.say("Sorry, I didn't hear you.")
+				self.yes = False
+				self.no = False
+
 				rospy.sleep(1)
 				return 'failure'
 
