@@ -72,7 +72,7 @@ class RobotPlay(smach.State):
 
 			return 'failure'
 
-class Confirmation(smach.State):
+class RobotYesNo(smach.State):
 	def __init__(self, message = "Hello!", delay = 5):
 		smach.State.__init__(self, outcomes=['yes', 'no', 'failure'])
 
@@ -115,7 +115,7 @@ class Confirmation(smach.State):
 			#Call startstop function
 			stop = False
 			start_time = time.time()
-			while self.yes == False and self.no == False and stop = False:
+			while self.yes == False and self.no == False and stop == False:
 
 				if time.time() - start_time > 60:
 					stop = True
@@ -131,7 +131,7 @@ class Confirmation(smach.State):
 				rospy.sleep(2)
 				return 'no'
 			else:
-				self.soundhandle.say("Sorry, I didn't heard you.")
+				self.soundhandle.say("Sorry, I didn't hear you.")
 				rospy.sleep(2)
 				return 'failure'
 

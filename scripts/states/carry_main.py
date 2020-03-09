@@ -14,7 +14,7 @@ import time
 from states.move_arm import MoveArm
 from states.follow_person import FollowPerson
 from states.move_base import MoveBase
-from states.speech import RobotSay, RobotPlay
+from states.speech import RobotSay, RobotPlay, RobotYesNo
 
 print("Initializing...")
 rospy.sleep(1)
@@ -49,11 +49,14 @@ def create_sm():
         smach.StateMachine.add('FOLLOWPERSON', FollowPerson(delay = 60),
                                transitions={'success': 'FINAL', 'timeout': 'failure', 'failure': 'failure'})
 
-        smach.StateMachine.add('SAY', RobotSay(sentence = "Hello, I am Turtlebot.", delay = 2),
+        smach.StateMachine.add('SAY', RobotSay(message = "Hello, I am Turtlebot.", delay = 2),
                                transitions={'success': 'PLAY', 'failure': 'failure'})
 
         smach.StateMachine.add('PLAY', RobotPlay(path = "/home/roboworks/erasersedu_ws/src/carry_luggage/sounds/R2D2a.wav"),
                                transitions={'success': 'FINAL', 'failure': 'failure'})
+
+        smach.StateMachine.add('CONFIRMATION', RobotYesNo(message = "Can you hear me?"),
+                               transitions={'yes': 'CONFIRMATION', 'no':'CONFIRMATION', 'failure': 'failure'})
 
 	#Move rel example
 	@smach.cb_interface(outcomes=['success','failure'],
