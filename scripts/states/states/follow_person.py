@@ -108,7 +108,7 @@ class FollowPerson(smach.State):
 			self.fp_enable_leg_finder_pub.publish(True)
 			self.fp_start_follow_pub.publish(True)
 
-			start_time = time.time()
+			#start_time = time.time()
 			while self.stop == False:
 				if self.fp_legs_found == False:
 					self.fp_start_follow_pub.publish(False)
