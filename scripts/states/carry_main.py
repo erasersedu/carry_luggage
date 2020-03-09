@@ -49,7 +49,7 @@ def create_sm():
         smach.StateMachine.add('FOLLOWPERSON', FollowPerson(delay = 60),
                                transitions={'success': 'FINAL', 'timeout': 'failure', 'failure': 'failure'})
 
-        smach.StateMachine.add('SAY', RobotSay(sentence = "Hello, I am Turtlebot.", delay = 5),
+        smach.StateMachine.add('SAY', RobotSay(sentence = "Hello, I am Turtlebot.", delay = 2),
                                transitions={'success': 'PLAY', 'failure': 'failure'})
 
         smach.StateMachine.add('PLAY', RobotPlay(path = "/home/roboworks/erasersedu_ws/src/carry_luggage/sounds/R2D2a.wav"),
