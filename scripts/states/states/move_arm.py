@@ -34,21 +34,35 @@ class MoveArm(smach.State):
 		    	self.pos2 = 0.0
 		    	self.pos3 = 0.0
 		    	self.pos4 = 0.0
-		    	self.pos5 = 0.655
+		    	self.pos5 = 0.655 #Close
+
+		elif target == 'vertical2':
+			self.pos1 = 0.0
+		    	self.pos2 = 0.0
+		    	self.pos3 = 0.0
+		    	self.pos4 = 0.0
+		    	self.pos5 = -0.6 #Open
+
+		elif target == 'carrying':
+			self.pos1 = 0.0
+		    	self.pos2 = -0.95
+		    	self.pos3 = 2.583
+		    	self.pos4 = -0.122
+		    	self.pos5 = 0.655 #Close
 
 		elif target == 'front':
 			self.pos1 = 0.0
 		    	self.pos2 = 1.57
 		    	self.pos3 = 0.349
 		    	self.pos4 = -0.47
-		    	self.pos5 = 0.655
+		    	self.pos5 = 0.655 #Close
 
 		elif target == 'front2':
 			self.pos1 = 0.0
 		    	self.pos2 = 1.57
 		    	self.pos3 = 0.349
 		    	self.pos4 = -0.47
-		    	self.pos5 = -0.6
+		    	self.pos5 = -0.6 #Open
 
 		elif target == 'left':
 			self.pos1 = 0.0

@@ -53,45 +53,74 @@ def create_sm():
 			    input_keys=['pose'], output_keys=['pose'])
 	def set_pose_cb(userdata):
 		try:
-		    userdata.pose = [0.2, 0.2, 0.76]
+		   	userdata.pose = [0.2, 0.2, 0.76]
 
-		    return 'success'
+			return 'success'
 		except:
-		    return 'failure'
+			return 'failure'
 	smach.StateMachine.add('SETPOSE', smach.CBState(set_pose_cb),
 		           transitions = {'success': 'MOVEBASE',
 		                          'failure': 'failure'})
 
         smach.StateMachine.add('MOVEBASE', MoveBase(mode = 'rel'),
                                transitions={'success': 'FINAL', 'timeout': 'failure', 'failure': 'failure'})
-	#####
 
 	#Mive abs example
 	@smach.cb_interface(outcomes=['success','failure'],
 			    input_keys=['pose'], output_keys=['pose'])
 	def set_pose_cb(userdata):
 		try:
-		    userdata.pose = [0.586, 0.978, 1.826]
+			userdata.pose = [-0.683, 0.393, -2.935]
 
-		    return 'success'
+			return 'success'
 		except:
-		    return 'failure'
+			return 'failure'
 	smach.StateMachine.add('SETPOSE2', smach.CBState(set_pose_cb),
 		           transitions = {'success': 'MOVEBASE2',
 		                          'failure': 'failure'})
 
         smach.StateMachine.add('MOVEBASE2', MoveBase(mode = 'abs'),
-                               transitions={'success': 'FINAL', 'timeout': 'failure', 'failure': 'failure'})
-	#####
+                               transitions={'success': 'MOVEARM', 'timeout': 'failure', 'failure': 'failure'})
 
-        smach.StateMachine.add('MOVEARM', MoveArm(target = 'vertical', pose=[0.0, 0.0, 0.0, 0.0, 0.0], delay = 10),
+	##ARM##
+        smach.StateMachine.add('MOVEARM', MoveArm(target = 'vertical', pose=[0.0, 0.0, 0.0, 0.0, 0.0], delay = 9),
                                transitions={'success': 'MOVEARM2', 'timeout': 'failure', 'failure': 'failure'})
 
-        smach.StateMachine.add('MOVEARM2', MoveArm(target = 'front2', pose=[0.0, 0.0, 0.0, 0.0, 0.0], delay = 10),
+        smach.StateMachine.add('MOVEARM2', MoveArm(target = 'front2', pose=[0.0, 0.0, 0.0, 0.0, 0.0], delay = 9),
                                transitions={'success': 'MOVEARM3', 'timeout': 'failure', 'failure': 'failure'})
 
-        smach.StateMachine.add('MOVEARM3', MoveArm(target = 'front', pose=[0.0, 0.0, 0.0, 0.0, 0.0], delay = 5),
+        smach.StateMachine.add('MOVEARM3', MoveArm(target = 'front', pose=[0.0, 0.0, 0.0, 0.0, 0.0], delay = 3),
+                               transitions={'success': 'MOVEARM4', 'timeout': 'failure', 'failure': 'failure'})
+
+	smach.StateMachine.add('MOVEARM4', MoveArm(target = 'carrying', pose=[0.0, 0.0, 0.0, 0.0, 0.0], delay = 9),
+                               transitions={'success': 'SETPOSE3', 'timeout': 'failure', 'failure': 'failure'})
+	##ARM##
+
+	#Mive abs example(Place to return)
+	@smach.cb_interface(outcomes=['success','failure'],
+			    input_keys=['pose'], output_keys=['pose'])
+	def set_pose2_cb(userdata):
+		try:
+			rospy.sleep(8)
+			userdata.pose = [-0.149, -3.372, 0.753]
+
+			return 'success'
+		except:
+			return 'failure'
+	smach.StateMachine.add('SETPOSE3', smach.CBState(set_pose2_cb),
+		           transitions = {'success': 'MOVEBASE3',
+		                          'failure': 'failure'})
+
+        smach.StateMachine.add('MOVEBASE3', MoveBase(mode = 'abs'),
+                               transitions={'success': 'MOVEARM5', 'timeout': 'failure', 'failure': 'failure'})
+
+	##ARM##
+	smach.StateMachine.add('MOVEARM5', MoveArm(target = 'front2', pose=[0.0, 0.0, 0.0, 0.0, 0.0], delay = 10),
+                               transitions={'success': 'MOVEARM6', 'timeout': 'failure', 'failure': 'failure'})
+
+	smach.StateMachine.add('MOVEARM6', MoveArm(target = 'vertical', pose=[0.0, 0.0, 0.0, 0.0, 0.0], delay = 10),
                                transitions={'success': 'FINAL', 'timeout': 'failure', 'failure': 'failure'})
+	##ARM##
 
 	@smach.cb_interface(outcomes=['success', 'failure'])
 	def final_cb(userdata):
