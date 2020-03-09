@@ -74,7 +74,7 @@ class RobotPlay(smach.State):
 			return 'failure'
 
 class RobotYesNo(smach.State):
-	def __init__(self, message = "Hello!", delay = 1):
+	def __init__(self, message = "Hello!"):
 		smach.State.__init__(self, outcomes=['yes', 'no', 'failure'])
 
 		self.soundhandle = SoundClient(blocking=True)
@@ -88,11 +88,9 @@ class RobotYesNo(smach.State):
 		self.no = False
 
 		self.message = message
-		self.delay = delay
 
 	def talkback_cb(self, msg):
 		# Print the recognized words on the screen
-		print(len(msg.data))
 		rospy.loginfo(msg.data)
 
 		self.yes = False
@@ -109,9 +107,8 @@ class RobotYesNo(smach.State):
 			rate = rospy.Rate(30)
 
 			self.soundhandle.say(self.message)
-			rospy.sleep(self.delay)
 
-			self.soundhandle.say('Say yes or no.')
+			self.soundhandle.say('Say robot yes or robot no.')
 			rospy.sleep(1)
 
 			#Call startstop function
@@ -147,10 +144,11 @@ class RobotYesNo(smach.State):
 				return 'failure'
 
 		except:
-			self.fp_legs_found = False
+			self.yes = False
+			self.no = False
 
-			self.fp_enable_leg_finder_pub.publish(False)
-			self.fp_start_follow_pub.publish(False)
+			self.soundhandle.say("Sorry, I didn't hear you.")
+			rospy.sleep(1)
 
 			print(traceback.format_exc())
 

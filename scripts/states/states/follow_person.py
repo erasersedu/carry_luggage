@@ -122,6 +122,9 @@ class FollowPerson(smach.State):
 
 				rate.sleep()
 
+			self.start = False
+			self.stop = False
+
 			self.fp_start_follow_pub.publish(False)
 			self.fp_enable_leg_finder_pub.publish(False)
 
@@ -132,6 +135,8 @@ class FollowPerson(smach.State):
 
 			#return 'timeout'
 		except:
+			self.start = False
+			self.stop = False
 			self.fp_legs_found = False
 
 			self.fp_enable_leg_finder_pub.publish(False)
