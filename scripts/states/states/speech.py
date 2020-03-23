@@ -104,7 +104,7 @@ class RobotYesNo(smach.State):
 
 	def execute(self, userdata):
 		try:
-			rate = rospy.Rate(30)
+			rate = rospy.Rate(30) #30
 
 			self.soundhandle.say(self.message)
 
